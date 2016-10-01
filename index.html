@@ -52,16 +52,14 @@
 		<div id="bullets"></div>
 	</div>
 
-	<div id="score">100</div>
+	<div id="score">0</div>
 
 
 <script>
-		var hero={
-			x:300,
-			y:500
-		}
+		var hero={x:300, y:500};
 		var enemies =[{x:50, y:50}, {x:250, y:100},{x:450, y:300},{x:157, y:300},{x:555, y:300}];
 		var bullets = [];
+		var score=0;
 
 		function displayHero(){
 			document.getElementById('hero').style['top']= hero.y +"px";
@@ -99,7 +97,6 @@
 		        arr[i] = arr[i + 1];
 		    }
 		    arr.length = arr.length - 1;
-		    console.log(arr);
 		    return x;
 
 		}
@@ -111,6 +108,33 @@
 				}
 			}
 		}
+		function RemoveAt(arr, x) {
+		    if (x >= 0 && x <= arr.length - 1) {
+		        y = arr[x];
+		        for (var i = x; i < arr.length - 1; i++) {
+		            arr[i] = arr[i + 1];
+		        }
+		        arr.length = arr.length - 1;
+		        console.log(arr);
+		        return y;
+		    } else {
+		        console.log("invalid");
+		    }
+
+		}
+		function collisionDetection(){
+			for (var i = 0; i < bullets.length; i++) {
+				for (var j = 0; j < enemies.length; j++) {
+					if (Math.abs(bullets[i].x - enemies[j].x)<10 && Math.abs(bullets[i].y-enemies[j].y) < 10) {
+						RemoveAt(bullets,i);
+						RemoveAt(enemies,j);
+						score+=10;
+
+
+					}
+				}
+			}
+		}
 
 		function gameLoop(){
 			displayHero();
@@ -118,17 +142,17 @@
 			displayEnemies();
 			moveBullets();
 			displayBullets();
-
+			collisionDetection();
 		}
 		setInterval(gameLoop,20);
 		////////////// UP: 87    DOWN:83  LEFT:65  RIGHT:68
 		document.onkeydown = function(a){
-			// if (a.keyCode == 87 ) {
-			// 	hero.y-=10;
-			// }
-			// if (a.keyCode == 83 ) {
-			// 	hero.y+=10;
-			// }
+			if (a.keyCode == 87 ) {
+				hero.y-=10;
+			}
+			if (a.keyCode == 83 ) {
+				hero.y+=10;
+			}
 			if (a.keyCode == 65 ) {
 				hero.x-=10;
 			}
